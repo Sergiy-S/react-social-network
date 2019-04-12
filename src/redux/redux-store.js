@@ -1,4 +1,5 @@
-import { createStore, combineReducers } from "redux";
+import { applyMiddleware, createStore, combineReducers } from "redux";
+import logger from "redux-logger";
 import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 import sidebarReducer from "./dialogs-reducer";
@@ -9,6 +10,6 @@ let reducers = combineReducers({
   sidebar: sidebarReducer
 });
 
-let store = createStore(reducers);
+let store = createStore(reducers, applyMiddleware(logger));
 
 export default store;
