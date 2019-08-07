@@ -9,3 +9,9 @@
 .form_control.error span {
   color: red;
 }
+
+.form_summary_error {
+  padding: 5px;
+  border: 1px solid red;
+  color: rosybrown;
+}

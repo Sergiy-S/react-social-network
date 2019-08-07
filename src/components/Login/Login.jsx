@@ -1,10 +1,11 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
-import { Input } from "../common/FormsControls/FormControls";
-import { required } from "../../utils/validators/validators";
 import { connect } from "react-redux";
-import { login } from "../../redux/auth-reducer";
 import { Redirect } from "react-router-dom";
+import { Field, reduxForm } from "redux-form";
+import { login } from "../../redux/auth-reducer";
+import { required } from "../../utils/validators/validators";
+import { Input } from "../common/FormsControls/FormControls";
+import style from "../common/FormsControls/FormControls.module.css";
 
 const LoginForm = props => {
   return (
@@ -30,6 +31,9 @@ const LoginForm = props => {
         <Field component={Input} name={"remember_me"} type={"checkbox"} />{" "}
         remember me
       </div>
+      {props.error && (
+        <div className={style.form_summary_error}>{props.error}</div>
+      )}
       <div>
         <button>Login</button>
       </div>
