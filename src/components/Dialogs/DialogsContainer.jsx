@@ -11,7 +11,7 @@ let mapStateToProps = state => {
   };
 };
 
-let mapDispatchTooProps = dispatch => {
+let mapDispatchToProps = dispatch => {
   return {
     sendMessage: newMessageBody => {
       dispatch(sendMessageCreator(newMessageBody));
@@ -22,7 +22,7 @@ let mapDispatchTooProps = dispatch => {
 export default compose(
   connect(
     mapStateToProps,
-    mapDispatchTooProps
+    mapDispatchToProps
   ),
   withAuthRedirect
 )(Dialogs);
