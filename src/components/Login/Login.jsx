@@ -7,7 +7,7 @@ import { required } from "../../utils/validators/validators";
 import { Input, createField } from "../common/FormsControls/FormControls";
 import style from "../common/FormsControls/FormControls.module.css";
 
-const LoginForm = ({ handleSubmit, error }) => {
+const LoginForm = ({ handleSubmit, error, captchaUrl }) => {
   return (
     <form onSubmit={handleSubmit}>
       {createField("Email", "email", [required], Input)}
@@ -23,6 +23,10 @@ const LoginForm = ({ handleSubmit, error }) => {
         "remember me"
       )}
 
+      {captchaUrl && <img src={captchaUrl} />}
+      {captchaUrl &&
+        createField("Symbols from image", "captcha", [required], Input, {})}
+
       {error && <div className={style.form_summary_error}>{error}</div>}
       <div>
         <button>Login</button>
@@ -37,7 +41,12 @@ let LoginReduxForm = reduxForm({
 
 const Login = props => {
   const onSubmit = form_data => {
-    props.login(form_data.email, form_data.password, form_data.remember_me);
+    props.login(
+      form_data.email,
+      form_data.password,
+      form_data.remember_me,
+      form_data.captcha
+    );
     console.log(form_data);
   };
 
@@ -48,12 +57,13 @@ const Login = props => {
   return (
     <div>
       <h1>LOGIN</h1>
-      <LoginReduxForm onSubmit={onSubmit} />
+      <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
     </div>
   );
 };
 
 const mapStateToProps = state => ({
+  captchaUrl: state.auth.captchaUrl,
   isAuth: state.auth.isAuth
 });
 

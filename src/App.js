@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect, Provider } from "react-redux";
-import { HashRouter, Route, withRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Redirect,
+  withRouter
+} from "react-router-dom";
 import { compose } from "redux";
 import "./App.css";
 import Preloader from "./components/common/Preloader/Preloader";
@@ -19,8 +25,19 @@ const ProfileContainer = React.lazy(() =>
 );
 
 class App extends Component {
+  catchAllUnhandledErrors = (reason, promise) => {
+    alert("ERROR");
+    // console.error(promiseRejectionEvent);
+  };
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors);
+  }
+  componentWillUnmount() {
+    window.removeEventListener(
+      "unhandledrejection",
+      this.catchAllUnhandledErrors
+    );
   }
 
   render() {
@@ -33,13 +50,17 @@ class App extends Component {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route path="/dialogs" render={withSuspense(DialogsContainer)} />
-          <Route
-            path="/profile/:userId?"
-            render={withSuspense(ProfileContainer)}
-          />
-          <Route path="/users" render={() => <UsersContainer />} />
-          <Route path="/login" render={() => <LoginPage />} />
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to={"/profile"} />} />
+            <Route path="/dialogs" render={withSuspense(DialogsContainer)} />
+            <Route
+              path="/profile/:userId?"
+              render={withSuspense(ProfileContainer)}
+            />
+            <Route path="/users" render={() => <UsersContainer />} />
+            <Route path="/login" render={() => <LoginPage />} />
+            <Route path="*" render={() => <div>404 NOT FOUND</div>} />
+          </Switch>
         </div>
       </div>
     );
@@ -60,11 +81,11 @@ let AppContainer = compose(
 
 const SamuraiJSApp = props => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Provider store={store}>
         <AppContainer />
       </Provider>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
